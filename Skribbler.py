@@ -1,4 +1,4 @@
-import Mouse
+import Mouse, Sketch
 
 topLeft = (500, 260)
 bottomRight = (1280, 850)
@@ -68,8 +68,8 @@ def preProcess(rgba):
     for key in colors:
         pixels[key] = []
 
-    for x in range(0, width, 10):
-        for y in range(0, height, 10):
+    for x in range(0, Sketch.sketchWidth, 10):
+        for y in range(0, Sketch.sketchHeight, 10):
             r, g, b, a = rgba.getpixel((x, y))
             if a != 0:
                 color = getColor(r, g, b)
