@@ -4,11 +4,6 @@ import requests, time
 from PIL import Image
 from io import BytesIO
 
-canvasTopLeft = (0, 0)
-canvasBottomRight = (0, 0)
-sketchWidth = 0
-sketchHeight = 0
-
 rgb = None
 
 def countdown(t):
@@ -18,11 +13,6 @@ def countdown(t):
     print()
 
 def init():
-    global canvasTopLeft
-    global canvasBottomRight
-    global sketchWidth
-    global sketchHeight
-
     print("Move cursor to top left corner of canvas!")
     countdown(1)
     canvasTopLeft = Mouse.getPosition()
@@ -30,20 +20,19 @@ def init():
 
     print("Move cursor to bottom right corner of canvas!")
     countdown(1)
-    canvasBottomRight = Mouse.getPosition()
-    print("Bottom-Right corner:", canvasBottomRight)
+    Sketch.bottomRight = Mouse.getPosition()
+    print("Bottom-Right corner:", Sketch.bottomRight)
 
-    sketchWidth = canvasBottomRight[0] - canvasTopLeft[0]
-    sketchHeight = canvasBottomRight[1] - canvasTopLeft[1]
-    print("Canvas-Dimensions:",sketchWidth,sketchHeight)
+    Sketch.width = Sketch.bottomRight[0] - Sketch.topLeft[0]
+    Sketch.height = Sketch.bottomRight[1] - Sketch.topLeft[1]
+    print("Canvas-Dimensions:", Sketch.width, Sketch.height)
 
 def loadURL(url):
-    global sketchWidth
-    global sketchHeight
-    if sketchWidth == 0 or sketchHeight == 0:
+    global rgb
+    if Sketch.width == 0 or Sketch.height == 0:
         print("Canvas is not initialized! Try running 'init'")
         return
-    rgb = Sketch.getRGBFrom(cmd.replace("url ", ""), sketchWidth, sketchHeight)
+    rgb = Sketch.getRGBFrom(cmd.replace("url ", ""), Sketch.width, Sketch.height)
     print("Loaded image successfully!")
 
 cmd = input()
@@ -52,6 +41,8 @@ while cmd != "exit":
         init()
     elif cmd.startswith("url "):
         loadURL(cmd.replace("url ", ""))
+    elif cmd == "draw":
+        Sketch.draw(rgb)
     else:
         print("Unknown command!")
     cmd = input()
