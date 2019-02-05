@@ -18,9 +18,7 @@ colors = {"white": (255, 255, 255), "black": (0, 0, 0), "gray": (193, 193, 193),
     "pink": (211, 124, 170), "brown": (160, 82, 45)}
 
 
-def chooseColor(r, g, b):
-    global lastColorKey
-    
+def getColor(r, g, b):
     bestKey = ""
     bestDiff = 1000
     for key in colors: 
@@ -30,20 +28,51 @@ def chooseColor(r, g, b):
         if diff < bestDiff:
             bestDiff = diff
             bestKey = key
+    return bestKey
+
+def chooseColor(r, g, b):
+    global lastColorKey
+    
+    bestKey = getColor(r, g, b)
     if bestKey != lastColorKey:
         Mouse.click(btns[bestKey])
         lastColorKey = bestKey
 
+#def draw(rgba):
+#    Mouse.click(btns["delete"])
+#    Mouse.click(btns["size2"])
+#
+#    for x in range(0, width, 10):
+#        for y in range(0, height, 10):
+#            r, g, b, a = rgba.getpixel((x, y))
+#            if a != 0:
+#                chooseColor(r, g, b)
+#                Mouse.click((topLeft[0]+x, topLeft[1]+y))
+#    return
 
-def draw(rgba):
+def drawPreprocessed(pixels):
     Mouse.click(btns["delete"])
     Mouse.click(btns["size2"])
 
-    Mouse.click(btns["black"])
+    for color in pixels:
+        Mouse.click(btns[color])
+        for pixel in pixels[color]:
+            Mouse.click((topLeft[0]+pixel[0], topLeft[1]+pixel[1]))
+    print("Finished drawing!")
+
+def preProcess(rgba):
+    global colors
+    
+    pixels = {}
+    for key in colors:
+        pixels[key] = []
+
     for x in range(0, width, 10):
         for y in range(0, height, 10):
             r, g, b, a = rgba.getpixel((x, y))
             if a != 0:
-                chooseColor(r, g, b)
-                Mouse.click((topLeft[0]+x, topLeft[1]+y))
-    return
+                color = getColor(r, g, b)
+                if color != "white":
+                    pixels[color].append((x, y))
+        
+    return pixels 

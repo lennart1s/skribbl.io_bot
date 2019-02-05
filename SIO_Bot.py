@@ -5,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 
 rgba = None
+preProcessed = None
 
 def countdown(t):
     for i in range(0, t):
@@ -35,14 +36,23 @@ def loadURL(url):
     rgba = Sketch.getRGBAFrom(cmd.replace("url ", ""), Skribbler.width, Skribbler.height)
     print("Loaded image successfully!")
 
+def preProcess():
+    global preProcessed, rgba
+
+    preProcessed = Skribbler.preProcess(rgba)
+    print("Preprocessed image!")
+
 cmd = input()
 while cmd != "exit":
     if cmd == "init":
         init()
     elif cmd.startswith("url "):
         loadURL(cmd.replace("url ", ""))
+        preProcess()
     elif cmd == "draw":
-        Skribbler.draw(rgba)
+        Skribbler.drawPreprocessed(preProcessed)
+    #elif cmd == "drawPre":
+        #Skribbler.drawPreprocessed(preProcessed)
     else:
         print("Unknown command!")
     cmd = input()
