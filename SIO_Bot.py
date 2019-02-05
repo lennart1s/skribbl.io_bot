@@ -4,7 +4,7 @@ import requests, time
 from PIL import Image
 from io import BytesIO
 
-rgb = None
+rgba = None
 
 def countdown(t):
     for i in range(0, t):
@@ -28,11 +28,11 @@ def init():
     print("Canvas-Dimensions:", Skribbler.width, Skribbler.height)
 
 def loadURL(url):
-    global rgb
+    global rgba
     if Skribbler.width == 0 or Skribbler.height == 0:
         print("Canvas is not initialized! Try running 'init'")
         return
-    rgb = Sketch.getRGBFrom(cmd.replace("url ", ""), Skribbler.width, Skribbler.height)
+    rgba = Sketch.getRGBAFrom(cmd.replace("url ", ""), Skribbler.width, Skribbler.height)
     print("Loaded image successfully!")
 
 cmd = input()
@@ -42,7 +42,7 @@ while cmd != "exit":
     elif cmd.startswith("url "):
         loadURL(cmd.replace("url ", ""))
     elif cmd == "draw":
-        Skribbler.draw(rgb)
+        Skribbler.draw(rgba)
     else:
         print("Unknown command!")
     cmd = input()
