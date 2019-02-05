@@ -1,4 +1,4 @@
-import Mouse, Sketch
+import Mouse, Sketch, Skribbler
 
 import requests, time
 from PIL import Image
@@ -20,19 +20,19 @@ def init():
 
     print("Move cursor to bottom right corner of canvas!")
     countdown(1)
-    Sketch.bottomRight = Mouse.getPosition()
+    Skribbler.bottomRight = Skribbler.getPosition()
     print("Bottom-Right corner:", Sketch.bottomRight)
 
-    Sketch.width = Sketch.bottomRight[0] - Sketch.topLeft[0]
-    Sketch.height = Sketch.bottomRight[1] - Sketch.topLeft[1]
-    print("Canvas-Dimensions:", Sketch.width, Sketch.height)
+    Skribbler.width = Skribbler.bottomRight[0] - Skribbler.topLeft[0]
+    Skribbler.height = Skribbler.bottomRight[1] - Skribbler.topLeft[1]
+    print("Canvas-Dimensions:", Skribbler.width, Skribbler.height)
 
 def loadURL(url):
     global rgb
-    if Sketch.width == 0 or Sketch.height == 0:
+    if Skribbler.width == 0 or Skribbler.height == 0:
         print("Canvas is not initialized! Try running 'init'")
         return
-    rgb = Sketch.getRGBFrom(cmd.replace("url ", ""), Sketch.width, Sketch.height)
+    rgb = Sketch.getRGBFrom(cmd.replace("url ", ""), Skribbler.width, Skribbler.height)
     print("Loaded image successfully!")
 
 cmd = input()
@@ -42,7 +42,7 @@ while cmd != "exit":
     elif cmd.startswith("url "):
         loadURL(cmd.replace("url ", ""))
     elif cmd == "draw":
-        Sketch.draw(rgb)
+        Skribbler.draw(rgb)
     else:
         print("Unknown command!")
     cmd = input()
