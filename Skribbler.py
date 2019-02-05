@@ -52,6 +52,7 @@ def chooseColor(r, g, b):
 
 def drawPreprocessed(pixels):
     Mouse.click(btns["delete"])
+    Mouse.click(btns["pen"])
     Mouse.click(btns["size2"])
 
     for color in pixels:
